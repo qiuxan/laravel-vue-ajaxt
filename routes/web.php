@@ -19,3 +19,6 @@ Route::get('/', function () {
 Route::get('skills', function () {
     return ['lare','vue','php','js', 'tooling'];
 });
+
+Route::get('projects/create', 'ProjectsController@create');
+Route::post('projects', 'ProjectsController@store');
