@@ -1,19 +1,102 @@
-// new Vue({
-//     el: '#app',
-//
-//     data:{
-//
-//         skills:[],
-//     },
-//
-//     mounted(){
-//
-//        axios.get('/skills').then(response=>console.log(response.data));
-//        axios.get('/skills').then(response=>this.skills=response.data);
-//     }
-//
-// });
+webpackJsonp([0],{
 
+/***/ 11:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony default export */ exports["a"] = {
+
+    template:'<h1>Hello world</h1>'
+
+};
+
+/***/ },
+
+/***/ 12:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Errors__ = __webpack_require__(33);
+
+
+class Form{
+    constructor(data){
+        this.originalData=data;
+        for(let field in data){
+            this[field]=data[field];
+        }
+
+        this.errors=new __WEBPACK_IMPORTED_MODULE_0__Errors__["a" /* default */]();
+
+    }
+    reset(){
+
+        for(let field in this.originalData){
+            this[field]='';
+        }
+        this.errors.clear();
+
+    }
+
+    data(){
+
+        let  data={};
+        for(let property in this.originalData){
+
+            data[property]=this[property];
+        }
+
+
+        return data;
+    }
+
+    submit(requestType,url){
+
+        return new Promise((resolve, reject)=>{
+            axios[requestType](url,this.data())
+                .then(response=>{
+
+                    this.onSuccess(response.data);
+                    resolve(response.data);
+                })
+                .catch(error=>{
+                    // console.log(error.response.data.errors);
+                    this.onFail(error.response.data.errors);
+
+
+                    reject(error.response.data);
+
+                })
+
+
+        });
+
+
+
+    }
+
+    onSuccess(data){
+        alert(data.message);
+        //this.errors.clear();
+        this.reset();
+
+    }
+
+    onFail(errors){
+        //console.log(errors);
+        this.errors.record(errors);
+
+    }
+}
+
+/* harmony default export */ exports["a"] = Form;
+
+/***/ },
+
+/***/ 33:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
 class Errors {
 
     constructor(){
@@ -23,7 +106,7 @@ class Errors {
 
     get(field){
 
-       // console.log(this.errors);
+        // console.log(this.errors);
 
         if (this.errors[field]){
 
@@ -59,88 +142,45 @@ class Errors {
 
 }
 
-class Form{
-    constructor(data){
-        this.originalData=data;
-        for(let field in data){
-            this[field]=data[field];
-        }
+/* harmony default export */ exports["a"] = Errors;
 
-        this.errors=new Errors();
+/***/ },
 
-    }
-    reset(){
+/***/ 34:
+/***/ function(module, exports, __webpack_require__) {
 
-       for(let field in this.originalData){
-            this[field]='';
-       }
-       this.errors.clear();
-
-    }
-
-    data(){
-
-        let  data={};
-        for(let property in this.originalData){
-
-            data[property]=this[property];
-        }
-
-
-        return data;
-    }
-
-    submit(requestType,url){
-
-        return new Promise((resolve, reject)=>{
-            axios[requestType](url,this.data())
-                .then(response=>{
-
-                    this.onSuccess(response.data);
-                    resolve(response.data);
-                    })
-                .catch(error=>{
-                  // console.log(error.response.data.errors);
-                    this.onFail(error.response.data.errors);
-
-
-                    reject(error.response.data);
-
-                })
-
-
-        });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_Form__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_axios__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_Example__ = __webpack_require__(11);
 
 
 
-    }
 
-    onSuccess(data){
-         alert(data.message);
-        //this.errors.clear();
-        this.reset();
 
-    }
+window.axios=__WEBPACK_IMPORTED_MODULE_2_axios___default.a;
+window.Form=__WEBPACK_IMPORTED_MODULE_0__core_Form__["a" /* default */];
 
-    onFail(errors){
-        //console.log(errors);
-         this.errors.record(errors);
-    
-    }
-}
-
-new Vue({
+new __WEBPACK_IMPORTED_MODULE_1_vue___default.a({
 
     el:"#app",
 
+    components:{
+
+        Example: __WEBPACK_IMPORTED_MODULE_3__components_Example__["a" /* default */]
+
+    },
+
     data:{
-        
-        form:new Form({
+
+        form:new __WEBPACK_IMPORTED_MODULE_0__core_Form__["a" /* default */]({
             name:'',
             description:'',
-        }),       
-
-
+        }),
     },
 
     methods:{
@@ -151,7 +191,6 @@ new Vue({
                 .then(data=>console.log(data))
                 .catch(errors=>console.log(errors));
 
-  
         },
 
         onSuccess(response){
@@ -160,19 +199,13 @@ new Vue({
 
             form.reset();
 
-            /*
-            *
-            * response =>alert('success')
-            *
-            *
-            * this.onSuccess
-            * onSuccess(response){}
-            *
-            * */
-
         },
 
     },
 
-
 });
+
+
+/***/ }
+
+},[34]);
