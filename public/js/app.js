@@ -43,7 +43,7 @@ class Errors {
     }
 
     record(errors){
-        console.log(errors);
+        //console.log(errors);
         this.errors=errors;
 
     }
@@ -74,31 +74,57 @@ class Form{
        for(let field in this.originalData){
             this[field]='';
        }
+       this.errors.clear();
+
     }
 
     data(){
-        let data=Object.assign({},this);
 
-        delete data.originalData;
-        delete data.errors;
+        let  data={};
+        for(let property in this.originalData){
+
+            data[property]=this[property];
+        }
+
+
         return data;
     }
 
     submit(requestType,url){
-        axios[requestType](url,this.data())
-        .then(this.onSuccess.bind(this))
-        .catch(this.onFail.bind(this));
+
+        return new Promise((resolve, reject)=>{
+            axios[requestType](url,this.data())
+                .then(response=>{
+
+                    this.onSuccess(response.data);
+                    resolve(response.data);
+                    })
+                .catch(error=>{
+                  // console.log(error.response.data.errors);
+                    this.onFail(error.response.data.errors);
+
+
+                    reject(error.response.data);
+
+                })
+
+
+        });
+
+
+
     }
 
-    onSuccess(response){
-         alert(response.data.message);
-        this.errors.clear();
+    onSuccess(data){
+         alert(data.message);
+        //this.errors.clear();
         this.reset();
 
     }
 
-    onFail(error){
-         this.errors.record(error.response.data.errors);
+    onFail(errors){
+        //console.log(errors);
+         this.errors.record(errors);
     
     }
 }
@@ -121,7 +147,9 @@ new Vue({
 
         onSubmit(){
 
-            this.form.submit('post','/projects');
+            this.form.submit('post','/projects')
+                .then(data=>console.log(data))
+                .catch(errors=>console.log(errors));
 
   
         },
